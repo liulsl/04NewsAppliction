@@ -10,14 +10,39 @@
         android:layout_height="match_parent"
         android:id="@+id/vp_guideactivity_guide">
     </android.support.v4.view.ViewPager>
+
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="50px"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/fl_guideactivity_indicator"
+        >
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/ll_guideactivity_indicator"></LinearLayout>
+
+        <View
+            android:layout_width="20px"
+            android:layout_height="20px"
+            android:background="@drawable/redpoint"
+            android:id="@+id/rp_guideactivity"/>
+    </FrameLayout>
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="进入首页"
         android:visibility="invisible"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="100px"
+        android:layout_above="@id/fl_guideactivity_indicator"
         android:id="@+id/bt_guideactivity_enter"
         android:layout_centerHorizontal="true"
+        android:background="@drawable/bt_enter_bg"
+        android:layout_marginBottom="20px"
         android:onClick="enterHome"/>
+
 </RelativeLayout>
