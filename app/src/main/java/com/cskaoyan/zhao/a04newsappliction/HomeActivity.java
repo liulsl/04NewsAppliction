@@ -28,7 +28,7 @@ public class HomeActivity extends SlidingFragmentActivity {
         slidingMenu.setBehindOffset(300);
 
 
-       FragmentManager fm = getFragmentManager();
+        FragmentManager fm = getFragmentManager();
 
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
 
