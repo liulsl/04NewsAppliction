@@ -58,11 +58,11 @@ public class ContentFragment extends Fragment {
             textView.setText("page"+i);*/
             // View content = View.inflate(getActivity(), R.layout.page_content, null);
 
-            pageList.add(new HomePage(getActivity()));
-            pageList.add(new NewsPage(getActivity()));
-            pageList.add(new SmartServicePage(getActivity()));
-            pageList.add(new GovernmentPage(getActivity()));
-            pageList.add(new SettingPage(getActivity()));
+            pageList.add(new HomePage(getActivity())); //touchmode NONE
+            pageList.add(new NewsPage(getActivity())); //touchmode FullScreen
+            pageList.add(new SmartServicePage(getActivity())); //touchmode NONE
+            pageList.add(new GovernmentPage(getActivity())); //touchmode NONE
+            pageList.add(new SettingPage(getActivity())); //touchmode NONE
 
         // }
 
@@ -81,26 +81,35 @@ public class ContentFragment extends Fragment {
 
                     case R.id.rb_fragmentcontent_home:
                         vp_fragmentcontent_content.setCurrentItem(0,false);
+                        pageList.get(0).setSlidingMenuEnable(false);
                         break;
 
                     case R.id.rb_fragmentcontent_news:
                         vp_fragmentcontent_content.setCurrentItem(1,false);
+                        pageList.get(0).setSlidingMenuEnable(true);
+                        NewsPage newsPage = (NewsPage) pageList.get(1);
+                        newsPage.getDataFromServer();
 
                         break;
                     case R.id.rb_fragmentcontent_service:
                         vp_fragmentcontent_content.setCurrentItem(2,false);
+                        pageList.get(0).setSlidingMenuEnable(false);
                         break;
                     case R.id.rb_fragmentcontent_goverment:
                         vp_fragmentcontent_content.setCurrentItem(3,false);
+                        pageList.get(0).setSlidingMenuEnable(false);
                         break;
                     case R.id.rb_fragmentcontent_setting:
                         vp_fragmentcontent_content.setCurrentItem(4,false);
+                        pageList.get(0).setSlidingMenuEnable(false);
                         break;
 
                 }
 
             }
         });
+
+        rg_framgentcontent_bottom.check(R.id.rb_fragmentcontent_home);
 
         return view ;//super.onCreateView(inflater, container, savedInstanceState);
     }

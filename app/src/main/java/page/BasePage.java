@@ -7,6 +7,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.cskaoyan.zhao.a04newsappliction.HomeActivity;
 import com.cskaoyan.zhao.a04newsappliction.R;
 
 /**
@@ -28,6 +29,11 @@ public abstract class BasePage {
 
     public abstract void initData() ;
 
+    public void setSlidingMenuEnable(boolean enable){
+
+        HomeActivity homeActivity = (HomeActivity) mActivity;
+        homeActivity.setSlidingMenuEnable(enable);
+    }
     private void initView() {
         mPageView =   View.inflate(mActivity, R.layout.page_content, null);
         tv_pageview_pageTitle = (TextView) mPageView.findViewById(R.id.tv_pageview_pageTitle);

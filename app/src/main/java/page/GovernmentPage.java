@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.view.Gravity;
 import android.widget.TextView;
 
+import com.cskaoyan.zhao.a04newsappliction.HomeActivity;
+
 /**
  * Created by zhao on 2016/8/23.
  */
@@ -23,5 +25,7 @@ public class GovernmentPage extends BasePage {
         textView.setText("政务中间的内容");
         textView.setGravity(Gravity.CENTER);
         ll_viewpage_content.addView(textView);
+
+
     }
 }
