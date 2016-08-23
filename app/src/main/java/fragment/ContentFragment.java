@@ -19,6 +19,13 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.List;
 
+import page.BasePage;
+import page.GovernmentPage;
+import page.HomePage;
+import page.NewsPage;
+import page.SettingPage;
+import page.SmartServicePage;
+
 /**
  * Created by zhao on 2016/8/22.
  */
@@ -26,7 +33,7 @@ public class ContentFragment extends Fragment {
 
     private ViewPager vp_fragmentcontent_content;
 
-    List<View> pageList = new ArrayList<View>();
+    List<BasePage> pageList = new ArrayList<BasePage>();
     private RadioGroup rg_framgentcontent_bottom;
 
     @Nullable
@@ -45,12 +52,22 @@ public class ContentFragment extends Fragment {
                 (ViewPager) view.findViewById(R.id.vp_fragmentcontent_content);
 
 
-        for (int i=0;i<5;i++){
+       // for (int i=0;i<5;i++){
 
-            TextView textView= new TextView(getActivity());
-            textView.setText("page"+i);
-            pageList.add(textView);
-        }
+           /* TextView textView= new TextView(getActivity());
+            textView.setText("page"+i);*/
+            // View content = View.inflate(getActivity(), R.layout.page_content, null);
+
+            pageList.add(new HomePage(getActivity()));
+            pageList.add(new NewsPage(getActivity()));
+            pageList.add(new SmartServicePage(getActivity()));
+            pageList.add(new GovernmentPage(getActivity()));
+            pageList.add(new SettingPage(getActivity()));
+
+        // }
+
+       /* Page page = pageList.get(0);
+        page.setPageTitle("首页");*/
 
         vp_fragmentcontent_content.setAdapter(new MyContentAdatper());
 
@@ -63,21 +80,21 @@ public class ContentFragment extends Fragment {
 
 
                     case R.id.rb_fragmentcontent_home:
-                        vp_fragmentcontent_content.setCurrentItem(0);
+                        vp_fragmentcontent_content.setCurrentItem(0,false);
                         break;
 
                     case R.id.rb_fragmentcontent_news:
-                        vp_fragmentcontent_content.setCurrentItem(1);
+                        vp_fragmentcontent_content.setCurrentItem(1,false);
 
                         break;
                     case R.id.rb_fragmentcontent_service:
-                        vp_fragmentcontent_content.setCurrentItem(2);
+                        vp_fragmentcontent_content.setCurrentItem(2,false);
                         break;
                     case R.id.rb_fragmentcontent_goverment:
-                        vp_fragmentcontent_content.setCurrentItem(3);
+                        vp_fragmentcontent_content.setCurrentItem(3,false);
                         break;
                     case R.id.rb_fragmentcontent_setting:
-                        vp_fragmentcontent_content.setCurrentItem(4);
+                        vp_fragmentcontent_content.setCurrentItem(4,false);
                         break;
 
                 }
@@ -104,10 +121,9 @@ public class ContentFragment extends Fragment {
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
 
-            View view = pageList.get(position);
-            container.addView(view);
-
-            return view;//super.instantiateItem(container, position);
+            BasePage page = pageList.get(position);
+            container.addView(page.mPageView);
+            return page.mPageView;//super.instantiateItem(container, position);
         }
 
         @Override
