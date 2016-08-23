@@ -31,7 +31,7 @@ public class HomeActivity extends SlidingFragmentActivity {
         slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
         //TOUCHMODE_FULLSCREEN
 
-        slidingMenu.setBehindOffset(300);
+        slidingMenu.setBehindOffset(350);
 
 
         fm = getFragmentManager();

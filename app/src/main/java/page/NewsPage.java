@@ -8,6 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cskaoyan.zhao.a04newsappliction.HomeActivity;
+import com.google.gson.Gson;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
@@ -19,6 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import bean.Categories;
 import bean.MenuTitle;
 import fragment.LeftMenuFragment;
 
@@ -95,10 +97,15 @@ public class NewsPage extends BasePage {
 
     private void parseJsonString(String result) {
 
-        try {
 
-            //Gson
+        //Gson
+        Gson gson = new Gson();
+        Categories categories = gson.fromJson(result, Categories.class);
+        Log.i(TAG,categories.toString());
+        LeftMenuFragment leftMenuFragment = homeActivity.getLeftMenuFragment();
+        leftMenuFragment.setMenuData(categories);
 
+       /* try {
             JSONObject jsonObject = new JSONObject(result);
             JSONArray data = jsonObject.getJSONArray("data");
             JSONObject jsonObject1 = data.getJSONObject(0);
@@ -119,13 +126,12 @@ public class NewsPage extends BasePage {
 
             MenuTitle menuTitle = new MenuTitle(title1,title2,title3,title4);
 
-
             LeftMenuFragment leftMenuFragment = homeActivity.getLeftMenuFragment();
             leftMenuFragment.setMenuData(menuTitle);
 
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
 
 
     }

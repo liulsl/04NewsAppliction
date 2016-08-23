@@ -7,6 +7,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -15,6 +16,7 @@ import com.cskaoyan.zhao.a04newsappliction.R;
 
 import org.w3c.dom.Text;
 
+import bean.Categories;
 import bean.MenuTitle;
 import page.BasePage;
 
@@ -27,9 +29,14 @@ public class LeftMenuFragment extends Fragment{
     private ListView lv_fragmentleftmenu_menu;
 
 
-    private MenuTitle titles;
+    private  int currentPosition;
+   // private MenuTitle titles;
+
+    private Categories categories;
 
     String[] menuTitles= new String[]{"头条","专题","组图","互动" };
+    private MyLeftMenuAdapter myLeftMenuAdapter;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,6 +48,20 @@ public class LeftMenuFragment extends Fragment{
         View view = View.inflate(getActivity(), R.layout.fragment_leftmenu, null);
 
         lv_fragmentleftmenu_menu = (ListView) view.findViewById(R.id.lv_fragmentleftmenu_menu);
+
+        lv_fragmentleftmenu_menu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+
+               /* TextView tv_itemmenulist_menutitle = (TextView) view.findViewById(R.id.tv_itemmenulist_menutitle);
+                tv_itemmenulist_menutitle.setEnabled(true);*/
+
+                currentPosition=position;
+                myLeftMenuAdapter.notifyDataSetChanged();
+
+            }
+        });
 
         return view ;//return super.onCreateView(inflater, container, savedInstanceState);
     }
@@ -65,36 +86,32 @@ public class LeftMenuFragment extends Fragment{
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
 
-            TextView textView = new TextView(getActivity());
 
-            switch (position){
+            Categories.MenuDataInfo menuDataInfo = categories.data.get(position);
+            /*TextView textView = new TextView(getActivity());
+            textView.setText(menuDataInfo.title);*/
 
-                case  0:
-                    textView.setText(titles.menutitle1);
+            View inflate = View.inflate(getActivity(),R.layout.item_menulist, null);
+            TextView tv_itemmenulist_menutitle = (TextView) inflate.findViewById(R.id.tv_itemmenulist_menutitle);
 
-                    break;
-                case  1:
-                    textView.setText(titles.menutitle2);
+            tv_itemmenulist_menutitle.setText(menuDataInfo.title);
 
-                    break;
-                case  2:
-                    textView.setText(titles.menutitle3);
-                    break;
-                case  3:
-                    textView.setText(titles.menutitle4);
-                    break;
-
-
-
+            if (currentPosition!=position)
+               tv_itemmenulist_menutitle.setEnabled(false);
+            else{
+                tv_itemmenulist_menutitle.setEnabled(true);
             }
 
-            return textView;
+
+            return tv_itemmenulist_menutitle;
         }
     }
 
-    public void setMenuData(MenuTitle menuTitle){
-        titles=menuTitle;
-        lv_fragmentleftmenu_menu.setAdapter(new MyLeftMenuAdapter());
+    public void setMenuData(Categories categories){
+        this.categories=categories;
+        myLeftMenuAdapter = new MyLeftMenuAdapter();
+
+        lv_fragmentleftmenu_menu.setAdapter(myLeftMenuAdapter);
 
 
     }
