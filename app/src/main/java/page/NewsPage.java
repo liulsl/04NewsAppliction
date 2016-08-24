@@ -174,8 +174,12 @@ public class NewsPage extends BasePage {
     }
 
     public void changeNewsPageContent(int position){
+
+
         ll_viewpage_content.removeAllViews();
         BaseMenuPage page = newsMenuPage.get(position);
+        page.initData();
+
         ll_viewpage_content.addView(page.mMenuPageView);
     }
 }

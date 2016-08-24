@@ -1,6 +1,7 @@
 package bean;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by zhao on 2016/8/23.
@@ -17,12 +18,22 @@ public class Categories {
 
     public  ArrayList<MenuDataInfo> data;
 
+
+    public class childrenInfo{
+
+      public  int id;
+      public  String title;
+      public  int type;
+      public  String url;
+    }
+
     public class MenuDataInfo{
        public   int id;
        public  String title;
        public  int type;
        public  String url;
        public  String url1;
+       public  List<childrenInfo> children;
 
         @Override
         public String toString() {
