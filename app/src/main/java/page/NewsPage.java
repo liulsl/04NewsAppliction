@@ -1,6 +1,7 @@
 package page;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -20,9 +21,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import bean.Categories;
 import bean.MenuTitle;
 import fragment.LeftMenuFragment;
+import menupage.BaseMenuPage;
+import menupage.InteractMenuPage;
+import menupage.NewsMenuPage;
+import menupage.PictrueMenuPage;
+import menupage.TopicMenuPage;
 
 /**
  * Created by zhao on 2016/8/23.
@@ -32,6 +41,8 @@ public class NewsPage extends BasePage {
 
     private static final String TAG = "NewsPage";
     private HomeActivity homeActivity;
+
+    List<BaseMenuPage>  newsMenuPage;
 
     public NewsPage(Activity activity) {
         super(activity);
@@ -105,6 +116,8 @@ public class NewsPage extends BasePage {
         LeftMenuFragment leftMenuFragment = homeActivity.getLeftMenuFragment();
         leftMenuFragment.setMenuData(categories);
 
+        initMenuPage(categories);
+
        /* try {
             JSONObject jsonObject = new JSONObject(result);
             JSONArray data = jsonObject.getJSONArray("data");
@@ -134,5 +147,35 @@ public class NewsPage extends BasePage {
         }*/
 
 
+    }
+
+    private void initMenuPage(Categories categories) {
+
+        newsMenuPage = new ArrayList<>();
+
+       /* for(int i=0;i< categories.data.size();i++){
+            TextView textView = new TextView(mActivity);
+            textView.setText( categories.data.get(i).title);
+            textView.setGravity(Gravity.CENTER);
+            textView.setTextColor(Color.RED);
+
+            newsMenuPage.add(textView);
+        }*/
+
+        newsMenuPage.add(new NewsMenuPage(mActivity,categories.data.get(0)));
+        newsMenuPage.add(new TopicMenuPage(mActivity,categories.data.get(1)));
+        newsMenuPage.add(new PictrueMenuPage(mActivity,categories.data.get(2)));
+        newsMenuPage.add(new InteractMenuPage(mActivity,categories.data.get(3)));
+
+
+        //让newspage进来之后默认显示 第一个menupage
+        changeNewsPageContent(0);
+
+    }
+
+    public void changeNewsPageContent(int position){
+        ll_viewpage_content.removeAllViews();
+        BaseMenuPage page = newsMenuPage.get(position);
+        ll_viewpage_content.addView(page.mMenuPageView);
     }
 }

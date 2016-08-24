@@ -67,4 +67,9 @@ public class HomeActivity extends SlidingFragmentActivity {
         return  lefemenu;
     }
 
+
+    public ContentFragment  getContentFragment (){
+        ContentFragment content = (ContentFragment) fm.findFragmentByTag("content");
+        return  content;
+    }
 }

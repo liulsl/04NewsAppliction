@@ -144,4 +144,15 @@ public class ContentFragment extends Fragment {
 
 
     }
+
+    public NewsPage getNewsPage(){
+
+        NewsPage newsPage =null;
+        if (pageList!=null&&!pageList.isEmpty()){
+
+              newsPage = (NewsPage) pageList.get(1);
+
+        }
+        return  newsPage;
+    }
 }

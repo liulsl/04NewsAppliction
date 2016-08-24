@@ -1,5 +1,6 @@
 package fragment;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,6 +13,7 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.cskaoyan.zhao.a04newsappliction.HomeActivity;
 import com.cskaoyan.zhao.a04newsappliction.R;
 
 import org.w3c.dom.Text;
@@ -19,6 +21,7 @@ import org.w3c.dom.Text;
 import bean.Categories;
 import bean.MenuTitle;
 import page.BasePage;
+import page.NewsPage;
 
 /**
  * Created by zhao on 2016/8/22.
@@ -36,16 +39,19 @@ public class LeftMenuFragment extends Fragment{
 
     String[] menuTitles= new String[]{"头条","专题","组图","互动" };
     private MyLeftMenuAdapter myLeftMenuAdapter;
+    private HomeActivity homeActivity;
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 
 
         /*TextView textView = new TextView(getActivity());
         textView.setText("leftmenu");*/
 
         View view = View.inflate(getActivity(), R.layout.fragment_leftmenu, null);
+
+        homeActivity = (HomeActivity) getActivity();
 
         lv_fragmentleftmenu_menu = (ListView) view.findViewById(R.id.lv_fragmentleftmenu_menu);
 
@@ -59,6 +65,16 @@ public class LeftMenuFragment extends Fragment{
 
                 currentPosition=position;
                 myLeftMenuAdapter.notifyDataSetChanged();
+
+                //从这里去修改newsPage 中的view
+                ContentFragment contentFragment = homeActivity.getContentFragment();
+                NewsPage newsPage = contentFragment.getNewsPage();
+                if (newsPage!=null){
+                    newsPage.changeNewsPageContent(position);
+                }
+
+                //让slidingMenu收回去
+                homeActivity.toggleSlidingMenu();
 
             }
         });
