@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.cskaoyan.zhao.a04newsappliction.HomeActivity;
 import com.cskaoyan.zhao.a04newsappliction.R;
 import com.viewpagerindicator.TabPageIndicator;
 
@@ -25,6 +27,7 @@ import page.BasePage;
 public class NewsMenuPage extends BaseMenuPage {
 
 
+    private static final String TAG ="NewsMenuPage" ;
     private ViewPager vp_newsmenupage_content;
 
     List<TextView> newsmenupagelist;
@@ -51,6 +54,31 @@ public class NewsMenuPage extends BaseMenuPage {
         indicator_newmenupage_title = (TabPageIndicator) view.findViewById(R.id.indicator_newmenupage_title);
         //IllegalStateException: ViewPager does not have adapter instance.
         //indicator_newmenupage_title.setViewPager(vp_newsmenupage_content);
+
+        vp_newsmenupage_content.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                HomeActivity homeActivity = (HomeActivity) mActivity;
+
+                Log.i(TAG,"position="+position);
+                if (position==0){
+                    //侧边栏可以滑动，enable
+                    homeActivity.setSlidingMenuEnable(true);
+                }else{  //侧边栏不可以滑动，disable
+                     homeActivity.setSlidingMenuEnable(false);
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         return view;
     }

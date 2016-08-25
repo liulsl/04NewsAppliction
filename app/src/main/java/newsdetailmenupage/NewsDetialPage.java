@@ -19,6 +19,7 @@ import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
+import com.viewpagerindicator.CirclePageIndicator;
 
 import bean.Categories;
 import bean.NewsDetail;
@@ -37,6 +38,9 @@ public class NewsDetialPage {
     private NewsDetail newsDetail;
     private ListView lv_newsDetailpage_newslist;
     private ViewPager vp_newsdetail_topnews;
+    private TextView tv_newsdetail_topnewsTitle;
+    private CirclePageIndicator indicator_topnews;
+    private View listHeader;
 
     public NewsDetialPage(Activity mActivity,
                           Categories.childrenInfo  newsDetailInfo     )
@@ -53,9 +57,15 @@ public class NewsDetialPage {
 
         lv_newsDetailpage_newslist = (ListView) v.findViewById(R.id.lv_newsDetailpage_newslist);
 
-        vp_newsdetail_topnews = (ViewPager) v.findViewById(R.id.vp_newsdetail_topnews);
 
+        listHeader = View.inflate(mActivity, R.layout.item_listview_header, null);
+        vp_newsdetail_topnews = (ViewPager) listHeader.findViewById(R.id.vp_newsdetail_topnews);
+        tv_newsdetail_topnewsTitle = (TextView) listHeader.findViewById(R.id.tv_newsdetail_topnewsTitle);
         // lv_newsDetailpage_newslist.setAdapter();
+        indicator_topnews = (CirclePageIndicator) listHeader.findViewById(R.id.indicator_topnews);
+
+        //把整个headerview放到listivew里面。最前面
+        lv_newsDetailpage_newslist.addHeaderView(listHeader);
         return  v;
     }
     private void initData() {
@@ -104,6 +114,23 @@ public class NewsDetialPage {
 
         //给ViewPager填充数据
         vp_newsdetail_topnews.setAdapter(new MyTopNewsViewPagerAdapter());
+        indicator_topnews.setViewPager(vp_newsdetail_topnews);
+        vp_newsdetail_topnews.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                tv_newsdetail_topnewsTitle.setText(newsDetail.getData().getTopnews().get(position).getTitle());
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
     }
 

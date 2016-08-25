@@ -25,15 +25,18 @@ public class NewsMenuPageViewPager extends ViewPager {
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         //父控件任何情况下都会给到子控件来处理
-        int currentItem = getCurrentItem();
+
+
+        //本质上是想去让slidingmenu 在第0个page上 可以滑动，在第0个之外，不能滑动
 
         //我们虽然想处理，但是我们应该是
         // 只有从第1个之后才处理
-        if (currentItem!=0){
+        // int currentItem = getCurrentItem();
+        /*if (currentItem!=0){
             getParent().requestDisallowInterceptTouchEvent(true);
         }else { // 第0个其实不想处理
             getParent().requestDisallowInterceptTouchEvent(false);
-        }
+        }*/
 
 
 
