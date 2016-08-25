@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bean.Categories;
+import newsdetailmenupage.NewsDetialPage;
 import page.BasePage;
 
 /**
@@ -57,7 +58,7 @@ public class NewsMenuPage extends BaseMenuPage {
     @Override
     public void initData() {
 
-        newsmenupagelist = new ArrayList<>();
+        /*newsmenupagelist = new ArrayList<>();
 
         for(int i =0;i< menuDataInfo.children.size();i++){
 
@@ -69,7 +70,7 @@ public class NewsMenuPage extends BaseMenuPage {
             textView.setGravity(Gravity.CENTER);
             newsmenupagelist.add(textView);
 
-        }
+        }*/
 
         vp_newsmenupage_content.setAdapter(new MyNewsMenuPageAdapter());
 
@@ -87,7 +88,7 @@ public class NewsMenuPage extends BaseMenuPage {
 
         @Override
         public int getCount() {
-            return newsmenupagelist.size();
+            return  menuDataInfo.children.size();
         }
 
         @Override
@@ -98,9 +99,10 @@ public class NewsMenuPage extends BaseMenuPage {
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
 
-            TextView textView = newsmenupagelist.get(position);
-            container.addView(textView);
-            return textView ;//super.instantiateItem(container, position);
+           // TextView textView = newsmenupagelist.get(position);
+            NewsDetialPage newsDetialPage = new NewsDetialPage(mActivity, menuDataInfo.children.get(position));
+            container.addView(newsDetialPage.mNewsDetailView);
+            return newsDetialPage.mNewsDetailView ;//super.instantiateItem(container, position);
         }
 
         @Override
