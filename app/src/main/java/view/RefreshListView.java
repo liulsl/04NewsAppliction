@@ -239,6 +239,11 @@ public class RefreshListView extends ListView {
     }
 
 
+    public void onLoadMoreComplete(){
+
+        refresh_listview_footer.setPadding(0,0,0,-measuredHeight);
+
+    }
     public MyRefreshListener l;
 
     public void setMyRefreshListener(MyRefreshListener l){
@@ -248,7 +253,7 @@ public class RefreshListView extends ListView {
 
        public void  onRefreshing();
 
-       public void onLoadMore();
+       public void  onLoadMore();
     }
 
 }

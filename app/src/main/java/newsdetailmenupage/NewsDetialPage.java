@@ -1,11 +1,13 @@
 package newsdetailmenupage;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cskaoyan.zhao.a04newsappliction.R;
+import com.cskaoyan.zhao.a04newsappliction.ShowNewsActivity;
 import com.google.gson.Gson;
 import com.lidroid.xutils.BitmapUtils;
 import com.lidroid.xutils.HttpUtils;
@@ -22,8 +25,11 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
 import com.viewpagerindicator.CirclePageIndicator;
 
+import java.util.List;
+
 import bean.Categories;
 import bean.NewsDetail;
+import constants.Const;
 import fragment.LeftMenuFragment;
 import view.RefreshListView;
 
@@ -35,6 +41,7 @@ public class NewsDetialPage {
     public View mNewsDetailView;
     Activity mActivity;
     public static final String TAG = "NewsDetialPage";
+    List<NewsDetail.DataBean.NewsBean> listDataSet;
 
     Categories.childrenInfo newsDetailInfo;
     private NewsDetail newsDetail;
@@ -43,6 +50,7 @@ public class NewsDetialPage {
     private TextView tv_newsdetail_topnewsTitle;
     private CirclePageIndicator indicator_topnews;
     private View listHeader;
+    private MyNewsListAdapter myNewsListAdapter;
 
     public NewsDetialPage(Activity mActivity,
                           Categories.childrenInfo  newsDetailInfo     )
@@ -66,8 +74,69 @@ public class NewsDetialPage {
                 initData() ;
             }
 
+
+            //需要去加载更多的新闻
             @Override
             public void onLoadMore() {
+
+
+                String more = newsDetail.data.getMore();
+
+                if (!more.isEmpty()){
+
+                     String moreUrl  = Const.SERVER_ADDR+more;
+
+                     HttpUtils httpUtils = new HttpUtils();
+
+                     httpUtils.send(HttpRequest.HttpMethod.GET, moreUrl, new RequestCallBack<String>() {
+                        @Override
+                        public void onSuccess(ResponseInfo<String> responseInfo) {
+
+                            Log.i(TAG,"loadmore data="+responseInfo.result) ;
+
+                            Gson gson = new Gson();
+                            newsDetail =gson.fromJson(responseInfo.result,NewsDetail.class);
+
+                            List<NewsDetail.DataBean.NewsBean> news = newsDetail.getData().getNews();
+                            listDataSet.addAll(news);
+                            myNewsListAdapter.notifyDataSetChanged();
+
+                            lv_newsDetailpage_newslist.onLoadMoreComplete();
+
+                        }
+                        @Override
+                        public void onFailure(HttpException e, String s) {
+                            lv_newsDetailpage_newslist.onLoadMoreComplete();
+                            Toast.makeText(mActivity,"连接失败，稍后再试",Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
+
+
+                }else{
+
+                    Toast.makeText(mActivity,"没有更多数据了，休息一会",Toast.LENGTH_SHORT).show();
+                    lv_newsDetailpage_newslist.onLoadMoreComplete();
+                }
+
+            }
+        });
+
+        lv_newsDetailpage_newslist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Log.i(TAG,"onItemClick  position="+position);
+                if (position>=2){
+                    NewsDetail.DataBean.NewsBean newsBean = listDataSet.get(position-2);
+
+                    String url = newsBean.getUrl();
+                    Intent intent = new Intent(mActivity, ShowNewsActivity.class);
+                    intent.putExtra("url",url);
+
+                    mActivity.startActivity(intent);
+
+                }
 
             }
         });
@@ -88,7 +157,7 @@ public class NewsDetialPage {
 
         //http://localhost:8080/zhbj/10007/list_1.json
 
-        String url ="http://10.0.2.2:8080/zhbj"+ newsDetailInfo.url;
+        String url = Const.SERVER_ADDR+ newsDetailInfo.url;
         Log.i(TAG,"initData");
 
         getDataFromServer(url);
@@ -129,7 +198,10 @@ public class NewsDetialPage {
         Gson gson = new Gson();
         newsDetail = gson.fromJson(result, NewsDetail.class);
         //给listview填充数据
-        lv_newsDetailpage_newslist.setAdapter(new MyNewsListAdapter());
+
+        listDataSet=newsDetail.data.getNews();
+        myNewsListAdapter = new MyNewsListAdapter();
+        lv_newsDetailpage_newslist.setAdapter(myNewsListAdapter);
 
         //给ViewPager填充数据
         vp_newsdetail_topnews.setAdapter(new MyTopNewsViewPagerAdapter());
@@ -208,7 +280,7 @@ public class NewsDetialPage {
 
         @Override
         public int getCount() {
-            return newsDetail.data.getNews().size();
+            return listDataSet.size();
         }
 
         @Override
@@ -232,9 +304,9 @@ public class NewsDetialPage {
 
 
             //加载数据
-             bitmapUtils.display(iv_listviewnewsdetail_img,newsDetail.data.getNews().get(position).getListimage());
-            tv_listviewnewsdetail_title.setText(newsDetail.data.getNews().get(position).getTitle());
-            tv_listviewnewsdetail_pubtime.setText(newsDetail.data.getNews().get(position).getPubdate());
+             bitmapUtils.display(iv_listviewnewsdetail_img,listDataSet.get(position).getListimage());
+            tv_listviewnewsdetail_title.setText(listDataSet.get(position).getTitle());
+            tv_listviewnewsdetail_pubtime.setText(listDataSet .get(position).getPubdate());
 
             return view;
         }
