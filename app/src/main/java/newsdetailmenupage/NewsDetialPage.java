@@ -108,7 +108,6 @@ public class NewsDetialPage {
         //Gson
         Gson gson = new Gson();
         newsDetail = gson.fromJson(result, NewsDetail.class);
-
         //给listview填充数据
         lv_newsDetailpage_newslist.setAdapter(new MyNewsListAdapter());
 

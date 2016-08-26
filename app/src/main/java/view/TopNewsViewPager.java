@@ -58,6 +58,8 @@ public class TopNewsViewPager extends ViewPager {
                 break;
             case MotionEvent.ACTION_MOVE:
 
+
+
                 endx = ev.getRawX();
                 endy =ev.getRawY();
 

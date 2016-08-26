@@ -42,8 +42,8 @@
 
     </RelativeLayout>
 -->
-    <ListView
+    <view.RefreshListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/lv_newsDetailpage_newslist"></ListView>
+        android:id="@+id/lv_newsDetailpage_newslist"></view.RefreshListView>
 </LinearLayout>
