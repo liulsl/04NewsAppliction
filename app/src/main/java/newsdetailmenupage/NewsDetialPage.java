@@ -10,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cskaoyan.zhao.a04newsappliction.R;
 import com.google.gson.Gson;
@@ -24,6 +25,7 @@ import com.viewpagerindicator.CirclePageIndicator;
 import bean.Categories;
 import bean.NewsDetail;
 import fragment.LeftMenuFragment;
+import view.RefreshListView;
 
 /**
  * Created by zhao on 2016/8/25.
@@ -36,7 +38,7 @@ public class NewsDetialPage {
 
     Categories.childrenInfo newsDetailInfo;
     private NewsDetail newsDetail;
-    private ListView lv_newsDetailpage_newslist;
+    private RefreshListView lv_newsDetailpage_newslist;
     private ViewPager vp_newsdetail_topnews;
     private TextView tv_newsdetail_topnewsTitle;
     private CirclePageIndicator indicator_topnews;
@@ -55,7 +57,21 @@ public class NewsDetialPage {
 
         View v =View.inflate(mActivity, R.layout.newsdetailpage,null);
 
-        lv_newsDetailpage_newslist = (ListView) v.findViewById(R.id.lv_newsDetailpage_newslist);
+        lv_newsDetailpage_newslist = (RefreshListView) v.findViewById(R.id.lv_newsDetailpage_newslist);
+
+        lv_newsDetailpage_newslist.setMyRefreshListener(new RefreshListView.MyRefreshListener() {
+            @Override
+            public void onRefreshing() {
+                //重新去加载该page对应的url，去获取服务器的最新数据
+                initData() ;
+            }
+
+            @Override
+            public void onLoadMore() {
+
+            }
+        });
+
 
 
         listHeader = View.inflate(mActivity, R.layout.item_listview_header, null);
@@ -73,6 +89,8 @@ public class NewsDetialPage {
         //http://localhost:8080/zhbj/10007/list_1.json
 
         String url ="http://10.0.2.2:8080/zhbj"+ newsDetailInfo.url;
+        Log.i(TAG,"initData");
+
         getDataFromServer(url);
 
     }
@@ -87,7 +105,8 @@ public class NewsDetialPage {
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-
+                //刷新完成
+                lv_newsDetailpage_newslist.onRefreshComplete();
                 Log.i(TAG,responseInfo.result);
                 parseJsonString(responseInfo.result);
             }
@@ -95,7 +114,8 @@ public class NewsDetialPage {
             @Override
             public void onFailure(HttpException e, String s) {
                 Log.i(TAG,s);
-
+                lv_newsDetailpage_newslist.onRefreshComplete();
+                Toast.makeText(mActivity,"加载失败，请稍后再试！",Toast.LENGTH_SHORT).show();
             }
         });
 
