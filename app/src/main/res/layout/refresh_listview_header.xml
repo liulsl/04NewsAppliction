@@ -2,21 +2,29 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
       android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingLeft="20dp"
-        android:id="@+id/iv_refreshlistviewheader_img"
-        android:src="@drawable/common_listview_headview_red_arrow"/>
 
-    <TextView
+
+
+
+
+         <ImageView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:id="@+id/iv_refreshlistviewheader_img"
+             android:src="@drawable/common_listview_headview_red_arrow"/>
+         <ProgressBar
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:visibility="gone"
+          android:id="@+id/pb_refreshlistviewheader_freshing"/>
+     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:id="@+id/tv_refreshlistviewheader_hint"
         android:paddingTop="20dp"
         android:layout_toRightOf="@id/iv_refreshlistviewheader_img"
-        android:text="请松开手刷新"/>
+        android:text="请继续下拉刷新"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
