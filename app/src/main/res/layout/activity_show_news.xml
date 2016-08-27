@@ -26,7 +26,8 @@
             android:background="@drawable/back"
             android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"
-            android:id="@+id/bt_shownewsactivity_back"/>
+            android:id="@+id/bt_shownewsactivity_back"
+            android:onClick="back"/>
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -34,7 +35,8 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="30dp"
             android:layout_alignParentRight="true"
-            android:id="@+id/bt_shownewsactivity_share"/>
+            android:id="@+id/bt_shownewsactivity_share"
+            android:onClick="share"/>
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -43,12 +45,22 @@
             android:layout_centerVertical="true"
             android:paddingRight="10dp"
             android:layout_toLeftOf="@id/bt_shownewsactivity_share"
-            android:id="@+id/bt_shownewsactivity_changesize"/>
+            android:id="@+id/bt_shownewsactivity_changesize"
+            android:onClick="changeSize"/>
     </RelativeLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <WebView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/wv_shownewsactivity_content"></WebView>
 
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:id="@+id/pb_shownewsactivity_loading"/>
+    </RelativeLayout>
 </LinearLayout>
