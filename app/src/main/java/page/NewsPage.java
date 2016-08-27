@@ -59,7 +59,9 @@ public class NewsPage extends BasePage {
         ll_viewpage_content.addView(textView);
 
         bt_pageview_leftbuttum.setVisibility(View.VISIBLE);
-        bt_pageview_rightbuttum.setVisibility(View.VISIBLE);
+        //bt_pageview_rightbuttum.setVisibility(View.VISIBLE);
+
+
 
         homeActivity = (HomeActivity) mActivity;
 
@@ -164,7 +166,16 @@ public class NewsPage extends BasePage {
 
         newsMenuPage.add(new NewsMenuPage(mActivity,categories.data.get(0)));
         newsMenuPage.add(new TopicMenuPage(mActivity,categories.data.get(1)));
-        newsMenuPage.add(new PictrueMenuPage(mActivity,categories.data.get(2)));
+
+        final PictrueMenuPage pictrueMenuPage = new PictrueMenuPage(mActivity, categories.data.get(2));
+        newsMenuPage.add(pictrueMenuPage);
+        bt_pageview_rightbuttum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pictrueMenuPage.changeUI();
+            }
+        });
+
         newsMenuPage.add(new InteractMenuPage(mActivity,categories.data.get(3)));
 
 
@@ -178,6 +189,14 @@ public class NewsPage extends BasePage {
 
         ll_viewpage_content.removeAllViews();
         BaseMenuPage page = newsMenuPage.get(position);
+
+        if (position==2){
+           bt_pageview_rightbuttum.setVisibility(View.VISIBLE);
+        }else{
+            bt_pageview_rightbuttum.setVisibility(View.GONE);
+
+        }
+
         page.initData();
 
         ll_viewpage_content.addView(page.mMenuPageView);
