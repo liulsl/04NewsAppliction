@@ -1,6 +1,7 @@
 package page;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.Gravity;
@@ -33,6 +34,7 @@ import menupage.InteractMenuPage;
 import menupage.NewsMenuPage;
 import menupage.PictrueMenuPage;
 import menupage.TopicMenuPage;
+import utils.SharedPrefUtils;
 
 /**
  * Created by zhao on 2016/8/23.
@@ -44,6 +46,8 @@ public class NewsPage extends BasePage {
     private HomeActivity homeActivity;
 
     List<BaseMenuPage>  newsMenuPage;
+
+
 
     public NewsPage(Activity activity) {
         super(activity);
@@ -84,10 +88,27 @@ public class NewsPage extends BasePage {
 
     }
 
+    public void getData(){
+        //看看有没有缓存，如果有，则使用cache里的数据
+        final String url = Const.SERVER_ADDR+"/categories.json";
+        String jsonFromCache = SharedPrefUtils.getJsonFromCache(url, mActivity);
+        if (jsonFromCache.isEmpty()){
+            //从服务器上去拿数据
+            Log.i(TAG,"缓存为空从服务器上去拿数据");
+            getDataFromServer(url);
+        }else{ //缓存不为空，则直接用缓存去解析json
+            Log.i(TAG,"缓存不为空直接用缓存去解析jso");
+            parseJsonString(jsonFromCache);
+        }
 
-    public void getDataFromServer(){
 
-        String url = Const.SERVER_ADDR+"/categories.json";
+
+    }
+
+
+    public void getDataFromServer(String url){
+
+        final String urlkey = url;
 
         Log.i(TAG, "getDataFromServer="+url);
         HttpUtils httpUtils = new HttpUtils();
@@ -96,7 +117,8 @@ public class NewsPage extends BasePage {
             public void onSuccess(ResponseInfo<String> responseInfo) {
 
                 Log.i(TAG,responseInfo.result);
-
+                //应该把从服务器上拿到的JsonString缓存起来
+                SharedPrefUtils.saveJsonToCache(urlkey,responseInfo.result,mActivity);
                 parseJsonString(responseInfo.result);
             }
 

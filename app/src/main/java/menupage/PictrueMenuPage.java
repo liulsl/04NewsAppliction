@@ -27,6 +27,8 @@ import com.lidroid.xutils.http.client.HttpRequest;
 import bean.Categories;
 import bean.PictureNews;
 import constants.Const;
+import utils.MyBitmapUtils;
+import utils.SharedPrefUtils;
 
 /**
  * Created by zhao on 2016/8/24.
@@ -65,8 +67,19 @@ public class PictrueMenuPage extends BaseMenuPage {
     public void initData() {
 
         //http://localhost:8080/zhbj/photos/photos_1.json
+        String url = Const.SERVER_ADDR + "/photos/photos_1.json";
 
+        String jsonFromCache = SharedPrefUtils.getJsonFromCache(url, mActivity);
+        if (jsonFromCache.isEmpty())
+            getDataFromServer(url);
+        else
+            parseJson(jsonFromCache);
+    }
+
+    private void getDataFromServer(String url) {
         HttpUtils httpUtils = new HttpUtils( );
+
+        final String keyUrl = url;
 
         httpUtils.send(HttpRequest.HttpMethod.GET,
                 Const.SERVER_ADDR + "/photos/photos_1.json",
@@ -77,6 +90,7 @@ public class PictrueMenuPage extends BaseMenuPage {
 
                         Log.i(TAG,responseInfo.result);
 
+                        SharedPrefUtils.saveJsonToCache(keyUrl,responseInfo.result,mActivity);
                         parseJson(responseInfo.result);
                     }
 
@@ -120,10 +134,11 @@ public class PictrueMenuPage extends BaseMenuPage {
 
     class MyPictureListAdapter extends BaseAdapter{
 
-        BitmapUtils bitmapUtils;
+       // BitmapUtils bitmapUtils;
+        MyBitmapUtils myBitmapUtils;
         public MyPictureListAdapter() {
 
-            bitmapUtils = new BitmapUtils(mActivity);
+            myBitmapUtils = new MyBitmapUtils(mActivity);
         }
 
         @Override
@@ -155,7 +170,7 @@ public class PictrueMenuPage extends BaseMenuPage {
             ImageView iv_listviewpicturenews_img = (ImageView) view.findViewById(R.id.iv_listviewpicturenews_img);
             TextView tv_listviewpicturenews_title = (TextView) view.findViewById(R.id.tv_listviewpicturenews_title);
 
-            bitmapUtils.display(iv_listviewpicturenews_img,listimage);
+            myBitmapUtils.display(iv_listviewpicturenews_img,listimage);
             tv_listviewpicturenews_title.setText(title);
 
             return view;

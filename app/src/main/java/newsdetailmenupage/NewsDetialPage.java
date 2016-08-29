@@ -35,6 +35,7 @@ import bean.Categories;
 import bean.NewsDetail;
 import constants.Const;
 import fragment.LeftMenuFragment;
+import utils.SharedPrefUtils;
 import view.RefreshListView;
 
 /**
@@ -198,14 +199,23 @@ public class NewsDetialPage {
         String url = Const.SERVER_ADDR+ newsDetailInfo.url;
         Log.i(TAG,"initData");
 
-        getDataFromServer(url);
+        String jsonFromCache = SharedPrefUtils.getJsonFromCache(url, mActivity);
+        if (!jsonFromCache.isEmpty()){
+            Log.i(TAG,"直接使用缓存");
+            parseJsonString(jsonFromCache );
+
+        }else{
+            Log.i(TAG,"缓存为空，去网络获取");
+            getDataFromServer(url);
+        }
+
 
     }
 
 
     public void getDataFromServer(String urlparm){
 
-        String url =urlparm;
+        final String url =urlparm;
 
         HttpUtils httpUtils = new HttpUtils();
         httpUtils.send(HttpRequest.HttpMethod.GET, url, new RequestCallBack<String>() {
@@ -215,6 +225,8 @@ public class NewsDetialPage {
                 //刷新完成
                 lv_newsDetailpage_newslist.onRefreshComplete();
                 Log.i(TAG,responseInfo.result);
+                SharedPrefUtils.saveJsonToCache(url,responseInfo.result,mActivity);
+
                 parseJsonString(responseInfo.result);
             }
 

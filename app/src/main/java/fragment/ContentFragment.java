@@ -25,6 +25,7 @@ import page.HomePage;
 import page.NewsPage;
 import page.SettingPage;
 import page.SmartServicePage;
+import utils.SharedPrefUtils;
 
 /**
  * Created by zhao on 2016/8/22.
@@ -88,7 +89,9 @@ public class ContentFragment extends Fragment {
                         vp_fragmentcontent_content.setCurrentItem(1,false);
                         pageList.get(0).setSlidingMenuEnable(true);
                         NewsPage newsPage = (NewsPage) pageList.get(1);
-                        newsPage.getDataFromServer();
+
+                        newsPage.getData();
+
 
 
                         break;
