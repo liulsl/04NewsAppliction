@@ -3,6 +3,7 @@ package com.cskaoyan.zhao.a04newsappliction;
 import android.animation.AnimatorSet;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.RelativeLayout;
 public class SplashActivity extends Activity {
 
     private RelativeLayout rl_splashactivity_bg;
+    private SharedPreferences config;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +57,9 @@ public class SplashActivity extends Activity {
         rl_splashactivity_bg.setAnimation(as);
 
 
+        //
+        config = getSharedPreferences("config", MODE_PRIVATE);
+
         //as.setRepeatCount(3);
         as.start();
 
@@ -67,7 +72,15 @@ public class SplashActivity extends Activity {
             @Override
             public void onAnimationEnd(Animation animation) {
                 //动画结束的时候call
-                startActivity(new Intent(SplashActivity.this,GuideActivity.class));
+                //如果之前已经有进入过guide，就让他直接进入主页面。
+
+                boolean isShowGuide = config.getBoolean("isShowGuide", false);
+
+                if (isShowGuide){
+                    startActivity(new Intent(SplashActivity.this,HomeActivity.class));
+                }else{
+                    startActivity(new Intent(SplashActivity.this,GuideActivity.class));
+                }
                 finish();
 
             }

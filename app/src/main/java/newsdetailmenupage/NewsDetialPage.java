@@ -1,7 +1,10 @@
 package newsdetailmenupage;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -25,6 +28,7 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
 import com.viewpagerindicator.CirclePageIndicator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import bean.Categories;
@@ -37,6 +41,7 @@ import view.RefreshListView;
  * Created by zhao on 2016/8/25.
  */
 public class NewsDetialPage {
+    //List<Integer> readlist= new ArrayList<Integer>();
 
     public View mNewsDetailView;
     Activity mActivity;
@@ -52,17 +57,21 @@ public class NewsDetialPage {
     private View listHeader;
     private MyNewsListAdapter myNewsListAdapter;
 
+    SharedPreferences sp;
     public NewsDetialPage(Activity mActivity,
                           Categories.childrenInfo  newsDetailInfo     )
     {
         this.mActivity = mActivity;
         this.newsDetailInfo=newsDetailInfo;
 
+        this.sp= mActivity.getSharedPreferences("config", Context.MODE_PRIVATE);
+
         mNewsDetailView = initView();
         initData();
     }
     public  View initView(){
 
+        Log.i(TAG,"initView()");
         View v =View.inflate(mActivity, R.layout.newsdetailpage,null);
 
         lv_newsDetailpage_newslist = (RefreshListView) v.findViewById(R.id.lv_newsDetailpage_newslist);
@@ -135,6 +144,35 @@ public class NewsDetialPage {
                     intent.putExtra("url",url);
 
                     mActivity.startActivity(intent);
+
+                    //在这里记录下用户看过的新闻。记录当前news的一个id
+                    int newsId = newsBean.getId();
+
+                     // readlist.add(id1);
+                    //35311,35312 35313
+                    //String read="35311,35312,35313,35311,35311,35311,35311,"
+
+                    String readlist = sp.getString("readlist", "");
+
+                    //先看看是否已经记录过该news 已读,如果已经保存过了，则无需做任何事情，反之，则需要保存到sp中
+                    boolean contains = readlist.contains(newsId + "");
+                    if (!contains){
+                        readlist = readlist+newsId+",";
+                        SharedPreferences.Editor edit = sp.edit();
+                        edit.putString("readlist",readlist);
+                        edit.commit();
+
+                        //方法1
+                        //myNewsListAdapter.notifyDataSetChanged();
+
+                        //方法2
+                        //这是想修改下当前点击的曾item的textview的颜色。
+                        TextView tv_listviewnewsdetail_title = (TextView) view.findViewById(R.id.tv_listviewnewsdetail_title);
+                        tv_listviewnewsdetail_title.setTextColor(Color.GRAY);
+
+                    }
+
+
 
                 }
 
@@ -302,11 +340,24 @@ public class NewsDetialPage {
             TextView tv_listviewnewsdetail_title = (TextView) view.findViewById(R.id.tv_listviewnewsdetail_title);
             TextView tv_listviewnewsdetail_pubtime = (TextView) view.findViewById(R.id.tv_listviewnewsdetail_pubtime);
 
-
             //加载数据
              bitmapUtils.display(iv_listviewnewsdetail_img,listDataSet.get(position).getListimage());
             tv_listviewnewsdetail_title.setText(listDataSet.get(position).getTitle());
             tv_listviewnewsdetail_pubtime.setText(listDataSet .get(position).getPubdate());
+
+
+            //点击的时候不会整个listview都刷新，所以点击的时候这里用不上了。
+            // 但是这里在下一次重新初始化listview的时候，就会发生作用。用户重新进来还是可以看到哪些新闻上次已读
+
+            int id = listDataSet.get(position).getId();
+            //判断一下这id是否在config里，如果已经包含了，就说明这个新闻已经被user 读过 了。
+            String readlist = sp.getString("readlist", "");
+            boolean contains = readlist.contains(id + "");
+            //读过的新闻，去显示灰色
+            if (contains){
+                tv_listviewnewsdetail_title.setTextColor(Color.GRAY);
+            }
+
 
             return view;
         }

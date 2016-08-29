@@ -26,6 +26,7 @@ import java.util.List;
 
 import bean.Categories;
 import bean.MenuTitle;
+import constants.Const;
 import fragment.LeftMenuFragment;
 import menupage.BaseMenuPage;
 import menupage.InteractMenuPage;
@@ -86,8 +87,9 @@ public class NewsPage extends BasePage {
 
     public void getDataFromServer(){
 
-        String url ="http://10.0.2.2:8080/zhbj/categories.json";
-                
+        String url = Const.SERVER_ADDR+"/categories.json";
+
+        Log.i(TAG, "getDataFromServer="+url);
         HttpUtils httpUtils = new HttpUtils();
         httpUtils.send(HttpRequest.HttpMethod.GET, url, new RequestCallBack<String>() {
             @Override
@@ -101,6 +103,7 @@ public class NewsPage extends BasePage {
             @Override
             public void onFailure(HttpException e, String s) {
                 Log.i(TAG,s);
+                Log.e(TAG,e.toString());
 
             }
         });

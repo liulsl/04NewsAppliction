@@ -1,6 +1,7 @@
 package com.cskaoyan.zhao.a04newsappliction;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -103,6 +104,13 @@ public class GuideActivity extends AppCompatActivity {
 
             }
         });
+
+        //如果显示了guide，可以加入一个flag到SP
+
+        SharedPreferences config = getSharedPreferences("config", MODE_PRIVATE);
+        SharedPreferences.Editor edit = config.edit();
+        edit.putBoolean("isShowGuide",true);
+        edit.commit();
     }
 
     private void initIndicator() {

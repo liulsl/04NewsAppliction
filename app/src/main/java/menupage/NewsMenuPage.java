@@ -40,6 +40,7 @@ public class NewsMenuPage extends BaseMenuPage {
     @Override
     public View initView() {
 
+        Log.i(TAG,"initView()");
        /* TextView textView = new TextView(mActivity);
         textView.setText(  menuDataInfo.title);
         textView.setGravity(Gravity.CENTER);
@@ -85,6 +86,7 @@ public class NewsMenuPage extends BaseMenuPage {
 
     @Override
     public void initData() {
+        Log.i(TAG,"initData()");
 
         /*newsmenupagelist = new ArrayList<>();
 
@@ -129,6 +131,7 @@ public class NewsMenuPage extends BaseMenuPage {
 
            // TextView textView = newsmenupagelist.get(position);
             NewsDetialPage newsDetialPage = new NewsDetialPage(mActivity, menuDataInfo.children.get(position));
+
             container.addView(newsDetialPage.mNewsDetailView);
             return newsDetialPage.mNewsDetailView ;//super.instantiateItem(container, position);
         }

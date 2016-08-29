@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,7 @@ import page.NewsPage;
 public class LeftMenuFragment extends Fragment{
 
 
+    private static final String TAG = "LeftMenuFragment";
     private ListView lv_fragmentleftmenu_menu;
 
 
@@ -127,6 +129,7 @@ public class LeftMenuFragment extends Fragment{
         this.categories=categories;
         myLeftMenuAdapter = new MyLeftMenuAdapter();
 
+        Log.i(TAG,"setMenuData");
         lv_fragmentleftmenu_menu.setAdapter(myLeftMenuAdapter);
 
 

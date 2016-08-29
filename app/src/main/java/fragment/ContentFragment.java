@@ -90,6 +90,7 @@ public class ContentFragment extends Fragment {
                         NewsPage newsPage = (NewsPage) pageList.get(1);
                         newsPage.getDataFromServer();
 
+
                         break;
                     case R.id.rb_fragmentcontent_service:
                         vp_fragmentcontent_content.setCurrentItem(2,false);
