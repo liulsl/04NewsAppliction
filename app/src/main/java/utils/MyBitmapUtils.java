@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.ImageView;
 
 import java.io.IOException;
@@ -18,6 +19,7 @@ import java.net.URL;
 public class MyBitmapUtils {
 
 
+    private static final String TAG = "MyBitmapUtils";
     Activity mactivity;
 
     public MyBitmapUtils(Activity mactivity) {
@@ -25,53 +27,32 @@ public class MyBitmapUtils {
     }
 
     //从网络上去获取图片，并显示在imageview上
-    public void display(final ImageView iv, String  listimageUrl){
+    public void display(final ImageView iv, String   imageUrl){
 
 
-        new AsyncTask<Object ,Integer,Bitmap>(){
+        //imageUrl
+        //先看看内存中的集合中是否有数据，如果有，就直接使用内存缓存
+        Bitmap bitmapFromMem = MemoryCacheUtils.getBitmapFromMem(imageUrl);
 
-            ImageView imageview;
-            String urlString;
+        if (bitmapFromMem!=null){
+            Log.i(TAG,"使用内存缓存的数据");
+            iv.setImageBitmap(bitmapFromMem);
+            //有内存缓存，则直接从内存获取数据，获取完毕之后直接return
 
-            @Override
-            protected Bitmap doInBackground(Object... params) {
+            return;
+        }
 
-                Bitmap bitmap=null;
-                 imageview = (ImageView) params[0];
-                urlString = (String) params[1];
 
-                try {
-                    URL url = new URL(urlString);
-                    HttpURLConnection  connection = (HttpURLConnection) url.openConnection();
-                    connection.setRequestMethod("GET");
-                    connection.setReadTimeout(5000);
-                    connection.setConnectTimeout(5000);
-                    connection.connect();
-                    int responseCode = connection.getResponseCode();
-                    if (responseCode==200){
-                        InputStream inputStream = connection.getInputStream();
-                        bitmap = BitmapFactory.decodeStream(inputStream);
-                    }
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        // 先看看文件缓存 有没有数据，如果有 就直接使用文件缓存
+        Bitmap bitmapFromFile = FileCacheUtils.getBitmapFromFile(imageUrl, mactivity);
+        if (bitmapFromFile!=null){
+            //有本地缓存，则直接从本地获取数据，获取完毕之后直接return
+            iv.setImageBitmap(bitmapFromFile);
+            return;
+        }
 
-                return bitmap;
-            }
-
-            @Override
-            protected void onPostExecute(Bitmap bitmap) {
-
-                if (bitmap!=null){
-                    imageview.setImageBitmap(bitmap);
-                }
-
-                super.onPostExecute(bitmap);
-            }
-        }.execute(iv,listimageUrl);
-
+        // 如果没有在去访问网络，使用网络缓存
+        NetworkCacheUtils.getBitmapFromNet(iv, imageUrl,mactivity);
 
 
     };
