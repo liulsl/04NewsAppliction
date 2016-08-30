@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
@@ -31,7 +32,14 @@ public class HomeActivity extends SlidingFragmentActivity {
         slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
         //TOUCHMODE_FULLSCREEN
 
-        slidingMenu.setBehindOffset(350);
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+        int widthPixels = displayMetrics.widthPixels;
+
+        slidingMenu.setBehindOffset((int) (widthPixels*0.75)); // 在不同分辨率 屏幕上差异比较大。
 
 
         fm = getFragmentManager();

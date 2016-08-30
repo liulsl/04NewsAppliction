@@ -7,6 +7,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import utils.Dp2Px;
 
 public class GuideActivity extends AppCompatActivity {
 
@@ -34,6 +37,7 @@ public class GuideActivity extends AppCompatActivity {
     private final int PageCount =3;
     private LinearLayout ll_guideactivity_indicator;
     private View rp_guideactivity;
+    private int width_in_pix;
 
     class MyPageInfo{
 
@@ -75,7 +79,7 @@ public class GuideActivity extends AppCompatActivity {
                 //更改小红点的位置： 和 红点leftmargin的关系 0-0 1-40 2-80。
                 //拿到小红点已经有的layoutparameter
                 FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) rp_guideactivity.getLayoutParams();
-                layoutParams.leftMargin = position*40 + (int)(40*positionOffset);
+                layoutParams.leftMargin = position*width_in_pix*2 + (int)(width_in_pix*2*positionOffset);
                 rp_guideactivity.setLayoutParams(layoutParams);
 
             }
@@ -119,9 +123,13 @@ public class GuideActivity extends AppCompatActivity {
 
             View view = new View(this);
             //单位是像素
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(20,20);
+
+
+            width_in_pix = Dp2Px.dp2px(20, this);
+
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(width_in_pix, width_in_pix);
             if (i!=0){
-                layoutParams.leftMargin=20;
+                layoutParams.leftMargin= width_in_pix;
             }
             view.setLayoutParams(layoutParams);
 
